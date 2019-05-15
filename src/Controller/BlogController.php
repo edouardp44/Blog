@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Entity\Category;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -84,25 +85,32 @@ class BlogController extends AbstractController
             $this->createNotFoundException('No found articles');
         }
 
+        /**
+         * @var ArrayCollection
+         */
         $category = $this->getDoctrine()
             ->getRepository(Category::class)
             ->findOneBy(['name' => $categoryName]);
 
+        $category=$category->getArticles();
+
         if (!$category) {
             throw $this->createNotFoundException('No found article with ' .$categoryName.' found in article\'s table');
         }
-
+        /*
         $articles = $this->getDoctrine()
             ->getRepository(Article::class)
             ->findBy(
                 ['category' => $category],
                 [ 'id' => 'DESC'],
                 3);
+        */
+
 
         return $this->render('blog/category.html.twig',
             [
                 'name' => $categoryName,
-                'articles' => $articles,
+                'articles' => $category,
             ]);
 
     }
