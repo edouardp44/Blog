@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ slug }}{% endblock %}
+
+{% block stylesheets %}{% endblock %}
+
+{% block body %}
+
+    <div>
+        <h1>Real article s title : {{ article.title }}</h1>
+        <h2>Category : {{ article.category.name }}</h2>
+        <p>{{ article.content }}</p>
+    </div>
+
+    <a href="{{ path('app_index') }}">
+        Back to homepage.
+    </a>
+
+{% endblock %}
+
+<br>
+<a href="{{ path('blog_index') }}">
+    Testing index() method from BlogController to view all articles.
+</a>
+<br>
+<a href="{{ path('show_category', {'categoryName' : "PHP"}) }}">
+    Testing index() method from BlogController to view articles PHP.
+</a>
+<br>
+<a href="{{ path('show_category', {'categoryName' : "javascript"}) }}">
+    Testing index() method from BlogController to view articles javascript.
+</a>
+<br>
+<a href="{{ path('show_category', {'categoryName' : "go"}) }}">
+    Testing index() method from BlogController to view articles go.
+</a>
+<br>
+<a href="{{ path('show_category', {'name': articles.name }) }}">{{articles.title}}
+</a>
+<br>

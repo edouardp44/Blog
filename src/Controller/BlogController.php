@@ -75,43 +75,16 @@ class BlogController extends AbstractController
     }
 
     /**
-     * @Route("/category/{categoryName}", name="show_category").
-     * @param string $categoriesName
-     * @return string
+     * @Route("/category/{name}", name="show_category").
      */
-    public function showByCategory(string $categoryName): Response
+    public function showByCategory(Category $category): Response
     {
-        if (!$categoryName) {
-            $this->createNotFoundException('No found articles');
-        }
-
-        /**
-         * @var ArrayCollection
-         */
-        $category = $this->getDoctrine()
-            ->getRepository(Category::class)
-            ->findOneBy(['name' => $categoryName]);
-
-        $category=$category->getArticles();
-
-        if (!$category) {
-            throw $this->createNotFoundException('No found article with ' .$categoryName.' found in article\'s table');
-        }
-        /*
-        $articles = $this->getDoctrine()
-            ->getRepository(Article::class)
-            ->findBy(
-                ['category' => $category],
-                [ 'id' => 'DESC'],
-                3);
-        */
-
 
         return $this->render('blog/category.html.twig',
             [
-                'name' => $categoryName,
-                'articles' => $category,
+                'articles' => $category->getArticles(),
             ]);
 
     }
+
 }
