@@ -1,2 +1,16 @@
-
+{% block title %}All articles{% endblock %}
+{% block body %}
 <h1>{{ owner }}'s blog index</h1>
+    <h2>All articles from article s table : </h2>
+    {% for article in articles %}
+        <div>
+            <h2>{{ loop.index }} / {{ article.title }} - Category : {{ article.category.name }}</h2>
+            <p>{{ article.content }}</p>
+        </div>
+    {% else %}
+        Aucun article trouvé.
+    {% endfor %}
+    <a href="{{ path('app_index') }}">
+        Back to homepage.
+    </a>
+{% endblock %}
