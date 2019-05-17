@@ -5,13 +5,15 @@
 {% block stylesheets %}{% endblock %}
 
 {% block body %}
-{% for article in articles %}
-    <div>
-        <h1>Real article s title : {{ article.title }}</h1>
-        <h2>Category : {{ article.category.name }}</h2>
-        <p>{{ article.content }}</p>
-    </div>
-{% endfor %}
+
+    {% for article in articles %}
+        <div>
+            *iuhyuh
+            <h1>Real article s title : {{ article.title }}</h1>
+            <h2>Category : {{ article.category.name }}</h2>
+            <p>{{ article.content }}</p>
+        </div>
+    {% endfor %}
 
     <a href="{{ path('app_index') }}">
         Back to homepage.

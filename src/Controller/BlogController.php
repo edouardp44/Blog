@@ -5,10 +5,13 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Entity\Category;
+use App\Form\ArticleSearchType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+
 
 class BlogController extends AbstractController
 {
@@ -25,9 +28,14 @@ class BlogController extends AbstractController
                 "No articles found in article's table."
             );
         }
+        $category = new Category();
+        $form = $this->createForm(ArticleSearchType::class, $category,
+            ['method'=>Request::METHOD_GET]);
+
         return $this->render('blog/index.html.twig', [
             'owner' => 'Edouard',
             'articles' => $articles,
+            'form' => $form->createView(),
         ]);
 
     }
@@ -75,7 +83,7 @@ class BlogController extends AbstractController
     }
 
     /**
-     * @Route("/category/{name}", name="show_category").
+     * @Route("/cat/{name}", name="show_category").
      */
     public function showByCategory(Category $category): Response
     {
