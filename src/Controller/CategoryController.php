@@ -24,6 +24,8 @@ class CategoryController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($category);
             $entityManager->flush();
+
+            return $this->redirectToRoute('/a');
         }
         return $this->render('blog/form.html.twig',[
             'form' => $form->createView(),
