@@ -1,0 +1,25 @@
+<table class="table">
+    <tbody>
+    <tr>
+        <th>Tag</th>
+        <td>{{ tag.name }}</td>
+    </tr>
+    {% for article in articles %}
+        <tr>
+            <th>Id</th>
+            <td>{{ article.id }}</td>
+        </tr>
+        <tr>
+            <th>Title</th>
+            <td>{{ article.title }}</td>
+        </tr>
+        <tr>
+            <th>Content</th>
+            <td>{{ article.content }}</td>
+        </tr>
+        <td>
+            <a href="{{ path('article_show', {'id': article.id}) }}">show</a>
+        </td>
+    {% endfor %}
+    </tbody>
+</table>

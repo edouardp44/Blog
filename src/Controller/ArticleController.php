@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Entity\Tag;
 use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -92,5 +93,16 @@ class ArticleController extends AbstractController
         }
 
         return $this->redirectToRoute('article_index');
+    }
+
+    /**
+     * @Route("/tag/{name}", name="tag", methods={"GET"})
+     */
+    public function tag(Tag $tag): Response
+    {
+        return $this->render('tag.html.twig', [
+            'tag'=>$tag,
+            'articles' => $tag->getArticles(),
+            ]);
     }
 }
