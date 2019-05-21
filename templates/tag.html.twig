@@ -11,14 +11,14 @@
         </tr>
         <tr>
             <th>Title</th>
-            <td>{{ article.title }}</td>
+            <td><a href="{{ path('article_show', {'id': article.id}) }}">{{ article.title }}</a></td>
         </tr>
         <tr>
             <th>Content</th>
             <td>{{ article.content }}</td>
         </tr>
         <td>
-            <a href="{{ path('article_show', {'id': article.id}) }}">show</a>
+            show
         </td>
     {% endfor %}
     </tbody>
