@@ -20,8 +20,11 @@ class ArticlesFixtures extends Fixture implements DependentFixtureInterface
         for ($i = 0; $i < 50; $i++)
         {
             $article = new Article();
+            $slugify = new Slugify();
+
             $article->setTitle(mb_strtolower($faker->sentence()));
-            $article->setContent($faker->text($maxNbChars = 200));
+            $article->setContent($faker->text($maxNbChars = 300));
+            $article->setSlug($slugify->generate($article->getTitle()));
             $manager->persist($article);
             $article->setCategory($this->getReference('categorie_' . rand(0, 4)));
         }
