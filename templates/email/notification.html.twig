@@ -1,4 +1,7 @@
-<h1>un nouveau article est disponible </h1>
-<p> Votre blog favoris a créer un nouveau article,
-    venez voir le nouveau article : {{ article.title }} </p>
-<a href="{{ url('article_show', {'id': article.id}) }}"> Mon superbe articles </a>
+{% extends 'baseEmail.html.twig' %}
+    {% block title %}<h1>un nouveau article est disponible </h1>{% endblock %}
+    {% block body %}
+        <p> Votre blog favoris a créer un nouveau article,
+            venez voir le nouveau article : {{ article.title }} </p>
+        <a href="{{ url('article_show', {'id': article.id}) }}"> Mon superbe articles </a>
+    {% endblock %}
