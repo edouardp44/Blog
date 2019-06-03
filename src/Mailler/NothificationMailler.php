@@ -29,7 +29,7 @@ class NothificationMailler
     {
         $message = (new \Swift_Message("Un nouvel article vient d'être publié !".$article->getTitle()))
             ->setFrom($_ENV['MAILER_URL_CONTACT'])
-            ->setTo('edouard.p44@gmail.com')
+            ->setTo(/* your e-mail*/)
             ->setBody($this->environment->render('email/notification.html.twig',
                 [
                     'article'=> $article,
