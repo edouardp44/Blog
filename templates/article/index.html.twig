@@ -3,8 +3,8 @@
 {% block title %}Article index{% endblock %}
 
 {% block body %}
-    <h1>Article index</h1>
 
+    <h1>Article index</h1>
     <table class="table">
         <thead>
             <tr>
@@ -12,6 +12,7 @@
                 <th>Title</th>
                 <th>Slug</th>
                 <th>Content</th>
+                <th>Author</th>
                 <th>Tag</th>
                 <th>Actions</th>
             </tr>
@@ -23,6 +24,7 @@
                 <td>{{ article.title }}</td>
                 <td>{{ article.slug }}</td>
                 <td>{{ article.content }}</td>
+                <td>{{ article.author.email }}</td>
                 <td>
                     {% for tag in article.tags %}
                         {{ tag.name }}

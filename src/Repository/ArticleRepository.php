@@ -64,4 +64,24 @@ class ArticleRepository extends ServiceEntityRepository
 
         return $query->execute();
     }
+
+    public function findAllWithUserCategoriesAndTags()
+    {
+        $qb = $this->createQueryBuilder('a')
+            ->innerJoin('a.author', 'author')
+            ->addSelect('author')
+            ->innerJoin('a.category','category')
+            ->addSelect('category')
+            ->innerJoin('a.tags','tags')
+            ->addSelect('tags')
+            ->getQuery();
+
+        return $qb->execute();
+
+    }
 }
+/*
+ * $em = $this->getEntityManager();
+        $query = $em->createQuery('SELECT * FROM App\Entity\Article a INNER JOIN a.category c INNER JOIN a.tags t INNER JOIN user ON a.author_id = user.id');
+        return $query->execute();
+ */
