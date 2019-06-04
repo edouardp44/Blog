@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Article;
 use App\Entity\Tag;
 use App\Form\ArticleType;
-use App\Mailler\NothificationMailler;
+use App\Mailer\NothificationMailer;
 use App\Repository\ArticleRepository;
 use App\Service\Slugify;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,14 +24,14 @@ class ArticleController extends AbstractController
     public function index(ArticleRepository $articleRepository): Response
     {
         return $this->render('article/index.html.twig', [
-            'articles' => $articleRepository->findAll(),
+            'articles'=> $articleRepository->findAllWithCategoriesAndTags()
         ]);
     }
 
     /**
      * @Route("/new", name="article_new", methods={"GET","POST"})
      */
-    public function new(Request $request, Slugify $slugify, NothificationMailler $mailler): Response
+    public function new(Request $request, Slugify $slugify, NothificationMailer $mailler): Response
     {
         $article = new Article();
         $form = $this->createForm(ArticleType::class, $article);
