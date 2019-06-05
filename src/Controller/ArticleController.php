@@ -35,6 +35,7 @@ class ArticleController extends AbstractController
     {
         $article = new Article();
         $form = $this->createForm(ArticleType::class, $article);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

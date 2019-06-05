@@ -31,9 +31,9 @@ class Article
     /**
      * @ORM\Column(type="text")
      * @Assert\Regex(
-     *     pattern="\bdigital\b",
+     *    pattern="/digital(( )*|(\.|\/|-)*)+/i" ,
      *     match=false,
-     *     message="en français, il faut dire numérique"
+     *     message="en français, il faut dire numérique")
      */
     private $content;
 
