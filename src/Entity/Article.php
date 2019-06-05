@@ -5,6 +5,9 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ArticleRepository")
@@ -20,6 +23,8 @@ class Article
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="ne me laisse pas tout vide")
+     * @Assert\Length(max="255", maxMessage="La catégorie saisie {{ value }} est trop longue, elle ne devrait pas dépasser {{ limit }} caractères")
      */
     private $title;
 
@@ -31,6 +36,7 @@ class Article
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="articles")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank(message="ne me laisse pas tout vide")
      */
     private $category;
 
@@ -147,4 +153,22 @@ class Article
         return $this;
     }
 
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
+    {
+        $metadata->addConstraint(new UniqueEntity([
+            'fields' => 'title',
+            'message' => 'ce titre existe déjà',
+        ]));
+
+        $metadata->addPropertyConstraint('title', new Assert\Type('string'));
+    }
+
+    public static function loadValidatorMetadat(ClassMetadata $metadata)
+    {
+        $metadata->addPropertyConstraint('content', new Assert\Regex([
+            'pattern' => '^/^((?!digital).)',
+            'match' => false,
+            'message' => 'en français, il faut dire numérique'
+        ]));
+    }
 }

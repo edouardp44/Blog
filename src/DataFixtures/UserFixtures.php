@@ -24,7 +24,6 @@ class UserFixtures extends Fixture
             $author,
             'authorpassword'
         ));
-
         $manager->persist($author);
 
         $admin = new User();
