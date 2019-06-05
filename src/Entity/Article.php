@@ -30,6 +30,10 @@ class Article
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\Regex(
+     *     pattern="\bdigital\b",
+     *     match=false,
+     *     message="en français, il faut dire numérique"
      */
     private $content;
 
@@ -163,12 +167,4 @@ class Article
         $metadata->addPropertyConstraint('title', new Assert\Type('string'));
     }
 
-    public static function loadValidatorMetadat(ClassMetadata $metadata)
-    {
-        $metadata->addPropertyConstraint('content', new Assert\Regex([
-            'pattern' => '^/^((?!digital).)',
-            'match' => false,
-            'message' => 'en français, il faut dire numérique'
-        ]));
-    }
 }
