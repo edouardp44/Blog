@@ -6,36 +6,44 @@ namespace App\Controller;
 use App\Entity\Article;
 use App\Entity\Category;
 use App\Form\ArticleSearchType;
+use App\Form\ArticleType;
 use Doctrine\Common\Collections\ArrayCollection;
+use PhpParser\Builder\Interface_;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-
+/**
+ * @Route("/blog")
+ */
 class BlogController extends AbstractController
 {
     /**
-    * @Route("/index", name="blog_index")
+    * @Route("/", name="blog_index")
     */
-    public function index()
+    public function index(SessionInterface $session ) : Response
     {
+        if (!$session->has('total')) {
+            $session->set('total', 0);
+        }
+
+        $total = $session->get('total');
+
         $articles = $this->getDoctrine()
             ->getRepository(Article::class)
             ->findAll();
+
         if (!$articles){
             throw $this->createNotFoundException(
                 "No articles found in article's table."
             );
         }
-        $category = new Category();
-        $form = $this->createForm(ArticleSearchType::class, $category,
-            ['method'=>Request::METHOD_GET]);
 
         return $this->render('blog/index.html.twig', [
             'owner' => 'Edouard',
             'articles' => $articles,
-            'form' => $form->createView(),
         ]);
 
     }
@@ -83,7 +91,7 @@ class BlogController extends AbstractController
     }
 
     /**
-     * @Route("/cat/{name}", name="show_category").
+     * @Route("/cat/{name}", name="blog_category").
      */
     public function showByCategory(Category $category): Response
     {

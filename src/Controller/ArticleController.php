@@ -34,7 +34,6 @@ class ArticleController extends AbstractController
 
     /**
      * @Route("/new", name="article_new", methods={"GET","POST"})
-     * @Security("is_granted('ROLE_ADMIN')")
      * @IsGranted("ROLE_AUTHOR")
      */
     public function new(Request $request, Slugify $slugify, NothificationMailer $mailler): Response
@@ -76,7 +75,7 @@ class ArticleController extends AbstractController
     /**
      * @Route("/{id}/edit", name="article_edit", methods={"GET","POST"})
      *
-     * @Security("is_granted('ROLE_ADMIN')", statusCode=404, message="You cannot acces this page !")
+     * @Security("user == article.getAuthor() or is_granted('ROLE_ADMIN')")
      */
     public function edit(Request $request, Article $article,Slugify $slugify): Response
     {
