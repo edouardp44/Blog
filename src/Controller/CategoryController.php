@@ -6,11 +6,13 @@ use App\Form\CategoryType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class CategoryController extends AbstractController
 {
     /**
      * @Route("/category", name="category")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function add(Request $request)
     {

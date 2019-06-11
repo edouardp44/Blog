@@ -8,6 +8,8 @@ use App\Form\ArticleType;
 use App\Mailer\NothificationMailer;
 use App\Repository\ArticleRepository;
 use App\Service\Slugify;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,9 +22,11 @@ class ArticleController extends AbstractController
 {
     /**
      * @Route("/", name="article_index", methods={"GET"})
+     * @IsGranted("IS_AUTHENTICATED_ANONYMOUSLY")
      */
     public function index(ArticleRepository $articleRepository): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_ANONYMOUSLY');
         return $this->render('article/index.html.twig', [
             'articles'=> $articleRepository->findAllWithUserCategoriesAndTags(),
         ]);
@@ -30,6 +34,8 @@ class ArticleController extends AbstractController
 
     /**
      * @Route("/new", name="article_new", methods={"GET","POST"})
+     * @Security("is_granted('ROLE_ADMIN')")
+     * @IsGranted("ROLE_AUTHOR")
      */
     public function new(Request $request, Slugify $slugify, NothificationMailer $mailler): Response
     {
@@ -61,6 +67,7 @@ class ArticleController extends AbstractController
      */
     public function show(Article $article): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_ANONYMOUSLY');
         return $this->render('article/show.html.twig', [
             'article' => $article,
         ]);
@@ -68,6 +75,8 @@ class ArticleController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="article_edit", methods={"GET","POST"})
+     *
+     * @Security("is_granted('ROLE_ADMIN')", statusCode=404, message="You cannot acces this page !")
      */
     public function edit(Request $request, Article $article,Slugify $slugify): Response
     {
@@ -82,7 +91,6 @@ class ArticleController extends AbstractController
                 'id' => $article->getId(),
             ]);
         }
-
         return $this->render('article/edit.html.twig', [
             'article' => $article,
             'form' => $form->createView(),
