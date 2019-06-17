@@ -59,9 +59,15 @@ class Article
      */
     private $author;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="favoris")
+     */
+    private $favoris;
+
     public function __construct()
     {
         $this->tags = new ArrayCollection();
+        $this->favoris = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -167,4 +173,31 @@ class Article
         $metadata->addPropertyConstraint('title', new Assert\Type('string'));
     }
 
+    /**
+     * @return Collection|User[]
+     */
+    public function getFavoris(): Collection
+    {
+        return $this->favoris;
+    }
+
+    public function addFavori(User $favori): self
+    {
+        if (!$this->favoris->contains($favori)) {
+            $this->favoris[] = $favori;
+            $favori->addFavori($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavori(User $favori): self
+    {
+        if ($this->favoris->contains($favori)) {
+            $this->favoris->removeElement($favori);
+            $favori->removeFavori($this);
+        }
+
+        return $this;
+    }
 }

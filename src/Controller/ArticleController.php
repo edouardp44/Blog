@@ -4,10 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Entity\Tag;
+use App\Entity\User;
 use App\Form\ArticleType;
 use App\Mailer\NothificationMailer;
 use App\Repository\ArticleRepository;
 use App\Service\Slugify;
+use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -71,6 +73,7 @@ class ArticleController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_ANONYMOUSLY');
         return $this->render('article/show.html.twig', [
             'article' => $article,
+            'isFavorite' => $this->getUser()->isFavorite($article)
         ]);
     }
 
@@ -124,5 +127,25 @@ class ArticleController extends AbstractController
             'tag'=>$tag,
             'articles' => $tag->getArticles(),
             ]);
+    }
+
+    /**
+     * @Route("/{id}/favorite", name="article_favorite", methods={"GET","POST"})
+     */
+    public function favorite(Request $request, Article $article, ObjectManager $manager): Response
+    {
+        if ($this->getUser()->getFavoris()->contains($article)) {
+            $this->getUser()->removeFavori($article);
+        }
+        else {
+            $this->getUser()->addFavori($article);
+        }
+
+        $manager->flush();
+
+        return $this->json([
+            'isFavorite' => $this->getUser()->isFavorite($article)
+        ]);
+
     }
 }
