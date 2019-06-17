@@ -27,7 +27,9 @@ class CategoryController extends AbstractController
             $entityManager->persist($category);
             $entityManager->flush();
 
-            return $this->redirectToRoute('/a');
+            $this->addFlash('success', 'The category has been create');
+
+            return $this->redirectToRoute('article_index');
         }
         return $this->render('blog/form.html.twig',[
             'form' => $form->createView(),

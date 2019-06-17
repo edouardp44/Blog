@@ -50,7 +50,9 @@ class ArticleController extends AbstractController
             $article->setAuthor($author);
             $entityManager->persist($article);
             $entityManager->flush();
-            $mailler->notify($article);
+            // $mailler->notify($article);
+
+            $this->addFlash('success', 'The new article has been created');
 
             return $this->redirectToRoute('article_index');
         }
@@ -75,7 +77,7 @@ class ArticleController extends AbstractController
     /**
      * @Route("/{id}/edit", name="article_edit", methods={"GET","POST"})
      *
-     * @Security("user == article.getAuthor() or is_granted('ROLE_ADMIN')")
+     * @Security("user == article.getAuthor() or is_granted('ROLE_ADMIN')",statusCode=404 ,message="Tu n'as pas accès a cette page")
      */
     public function edit(Request $request, Article $article,Slugify $slugify): Response
     {
@@ -85,6 +87,8 @@ class ArticleController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $article->setSlug($slugify->generate($article->getTitle()));
             $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', 'The article has been update');
 
             return $this->redirectToRoute('article_index', [
                 'id' => $article->getId(),
@@ -106,6 +110,7 @@ class ArticleController extends AbstractController
             $entityManager->remove($article);
             $entityManager->flush();
         }
+        $this->addFlash('delete', 'The article as been delete !');
 
         return $this->redirectToRoute('article_index');
     }
